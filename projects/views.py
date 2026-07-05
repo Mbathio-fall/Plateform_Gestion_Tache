@@ -1,14 +1,128 @@
-from django.shortcuts import render
-from .models import Projet
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
-# Create your views here.
+import projects
+from .models import Projet, Tache
 
+#vue dashboard
+
+@login_required
 
 def dashboard(request):
     projets = Projet.objects.all()
 
-    return render(
-        request,
-        "dashboard.html",
-        {"projets": projets}
+    return render(request,"dashboard.html",{"projets": projets})
+
+
+
+# vue projet_create
+
+@login_required
+def projet_create(request):
+
+    if request.method == "POST":
+          Projet.objects.create(
+            nom=request.POST.get("nom"),
+            description=request.POST.get("description"),
+            createur=request.user
+        )
+          
+          return redirect("dashboard")
+
+    return render(request,"projet_create.html")
+
+
+    
+# vues projet_detail
+
+@login_required
+def projet_detail(request, id): 
+  projet = get_object_or_404(Projet, id=id)
+  return render(request,"projet_detail.html",{"projet": projet})
+
+
+
+# vues projet_delete
+
+@login_required
+def projet_delete(request, id):
+   projet = get_object_or_404(Projet, id=id)    
+   projet.delete()
+
+   return redirect("dashboard")
+
+
+# vues projet_update
+
+@login_required
+def projet_update(request, id):
+    if request.method == "POST":
+     projet = get_object_or_404(Projet, id=id)
+     projet.nom = request.POST.get("nom")
+     projet.description = request.POST.get("description")
+     projet.save()
+     return redirect("dashboard")
+
+    return render(request,"projet_update.html", {"projet": projet}
     )
+
+
+
+# vues tache_create
+
+@login_required
+def tache_create(request):
+
+    if request.method == "POST":
+         Tache.objects.create(
+           titre=request.POST.get("titre"),
+           description=request.POST.get("description"),
+           projet = Projet.objects.get(id=request.POST.get("projet")),     
+           assigne = User.objects.get(id=request.POST.get("assigne")),
+           statut=request.POST.get("statut"),
+           priorite=request.POST.get("priorite"),
+           deadline=request.POST.get("deadline"),
+    )
+         return redirect("dashboard")
+
+    return render(request, "tache_create.html")
+
+    
+
+
+# vues tache_detail
+
+@login_required
+def tache_detail(request, id):
+
+    tache = get_object_or_404(Tache, id=id)
+
+    return render( request, "tache_detail.html",{"tache": tache})
+
+
+# vues tache_dlete
+
+@login_required
+def tache_delete(request, id):
+
+    tache = get_object_or_404(Tache, id=id)
+
+    tache.delete()
+
+    return redirect("dashboard")
+
+
+
+# vues tache_update
+
+@login_required
+def tache_update(request, id):
+    if request.method == "POST":
+        tache = Tache.objects.get(id=id),
+        tache.titre = request.POST.get("titre"),
+        tache.description = request.POST.get("description"),
+        tache.save(),
+        return redirect("dashboard"),
+    return render(request,"tache_update.html",{"tache": tache}
+)

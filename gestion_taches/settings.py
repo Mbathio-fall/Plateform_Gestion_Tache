@@ -57,7 +57,7 @@ ROOT_URLCONF = 'gestion_taches.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR/ 'gestion_taches' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
