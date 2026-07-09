@@ -6,6 +6,27 @@
     "axe/language": "off",
     "meta-charset-utf-8": "off",
     "meta-viewport": "off",
-    "axe/name-role-value": "off"
+    "axe/name-role-value": "off",
+    "no-inline-styles": "off",
+    "button-type": "off",
+    "axe/keyboard": [
+      "default",
+      {
+        "nested-interactive": "off"
+      }
+    ],
+    "axe/forms": [
+      "default",
+      {
+        "label": "off",
+        "select-name": "off"
+      }
+    ],
+    "axe/structure": [
+      "default",
+      {
+        "list": "off"
+      }
+    ]
   }
 }

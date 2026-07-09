@@ -1,9 +1,112 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Mon Dashboard</title>
-</head>
-<body>
-    <h1>Bienvenue sur la Plateforme de Gestion de Taches !</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    Tableau de bord
+</h2>
+
+<div class="row mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card text-white shadow" style="background-color:#6F4E37;">
+
+            <div class="card-body text-center">
+
+                <h5>Nombre de projets</h5>
+
+                <h2>{{ projets.count }}</h2>
+
+            </div>
+
+        
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="card shadow">
+
+    <div class="card-header  text-white" style="background-color:#a06439;">
+        <h4>Liste des projets</h4>
+    </div>
+
+
+    <div class="card-body">
+
+        {% if projets %}
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Nom</th>
+
+                    <th>Description</th>
+
+                    <th>Créateur</th>
+
+                    <th>Date de création</th>
+                    <th>Action</th>
+
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for projet in projets %}
+
+                <tr>
+
+                    <td>{{ projet.nom }}</td>
+
+                    <td>{{ projet.description }}</td>
+
+                    <td>{{ projet.createur.username }}</td>
+
+                    <td>{{ projet.date_creation }}</td>
+
+                    <td>
+
+                        <a href="{% url 'projet_detail' projet.id %}"
+                           class="btn btn-sm btn-info text-white"
+                           title="Voir">
+                          <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <div class="alert alert-info">
+
+                Aucun projet n'a été créé.
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

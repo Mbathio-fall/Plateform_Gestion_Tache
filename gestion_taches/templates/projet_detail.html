@@ -1,9 +1,219 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Mon Dashboard</title>
-</head>
-<body>
-    <h1> Voici les details du projet</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Détails du projet
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header text-white text-center"
+                     style="background-color:#6F4E37;">
+
+                    <h2>Détails du projet</h2>
+
+                </div>
+
+                <div class="card-body">
+
+                    <h4>{{ projet.nom }}</h4>
+
+                    <hr>
+
+                    <h5>Description</h5>
+
+                    <p>
+
+                        {{ projet.description }}
+
+                    </p>
+
+                    <hr>
+
+                    <p>
+
+                        <strong>Créé par :</strong>
+
+                        {{ projet.createur.username }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Date de création :</strong>
+
+                        {{ projet.date_creation }}
+
+                    </p>
+
+                    <div class="mt-4">
+
+                        <a href="{% url 'projet_update' projet.id %}"
+                           class="btn text-white"
+                           style="background-color:#6F4E37;">
+                            Modifier
+                        </a>
+
+                        <a href="{% url 'projet_delete' projet.id %}"
+                           class="btn btn-danger">
+                            Supprimer
+                        </a>
+
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                          Retour
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <br><br>
+    
+</div>
+<div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+
+    <h4>
+        <i class="bi bi-list-task"></i>
+        Liste des tâches
+        <span class="badge bg-secondary">{{ taches|length }}</span>
+    </h4>
+
+    <a href="{% url 'tache_create' %}"
+       class="btn text-white"
+       style="background-color:#6F4E37;">
+        <i class="bi bi-plus-circle"></i> Nouvelle tâche
+    </a>
+
+</div>
+
+{% if taches %}
+
+<table class="table table-bordered table-hover align-middle shadow-sm">
+
+    <thead class="table-light">
+
+        <tr>
+
+            <th>Titre</th>
+            <th>Assigné à</th>
+            <th>Statut</th>
+            <th>Priorité</th>
+            <th>Date limite</th>
+            <th class="text-center">Actions</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for tache in taches %}
+
+        <tr>
+
+            <td>{{ tache.titre }}</td>
+
+            <td>
+                {% if tache.assigne %}
+                    {{ tache.assigne.username }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <td>
+
+                {% if tache.statut == "todo" %}
+                    <span class="badge bg-warning text-dark">À faire</span>
+
+                {% elif tache.statut == "en_cours" %}
+                    <span class="badge bg-primary">En cours</span>
+
+                {% else %}
+                    <span class="badge bg-success">Terminée</span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if tache.priorite == "basse" %}
+                    <span class="badge bg-success">Basse</span>
+
+                {% elif tache.priorite == "moyenne" %}
+                    <span class="badge bg-warning text-dark">Moyenne</span>
+
+                {% else %}
+                    <span class="badge bg-danger">Haute</span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if tache.deadline %}
+                    {{ tache.deadline }}
+                {% else %}
+                    -
+                {% endif %}
+
+            </td>
+
+            <td class="text-center">
+
+                <a href="{% url 'tache_detail' tache.id %}"
+                   class="btn btn-sm btn-info text-white"
+                   title="Voir">
+                  <i class="bi bi-eye"></i>
+                </a>
+
+                <a href="{% url 'tache_update' tache.id %}"
+                   class="btn btn-sm text-white"
+                   style="background-color:#6F4E37;"
+                   title="Modifier">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+
+                <a href="{% url 'tache_delete' tache.id %}"
+                   class="btn btn-sm btn-danger"
+                   title="Supprimer">
+                    <i class="bi bi-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% else %}
+
+<div class="alert alert-info text-center">
+
+    <i class="bi bi-info-circle"></i>
+
+    Aucune tâche n'est associée à ce projet.
+
+</div>
+
+{% endif %}
+
+{% endblock %}

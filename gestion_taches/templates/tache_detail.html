@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}
+Détails de la tâche
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header text-center text-white"
+                     style="background-color:#6F4E37;">
+
+                    <h2>Détails de la tâche</h2>
+
+                </div>
+
+                <div class="card-body">
+
+                    <h4>{{ tache.titre }}</h4>
+
+                    <hr>
+
+                    <h5>Description</h5>
+
+                    <p>{{ tache.description }}</p>
+
+                    <hr>
+
+                    <p>
+
+                        <strong>Projet :</strong>
+
+                        {{ tache.projet.nom }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Assignée à :</strong>
+
+                        {{ tache.assigne.username }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Statut :</strong>
+
+                        {{ tache.get_statut_display }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Priorité :</strong>
+
+                        {{ tache.get_priorite_display }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Date limite :</strong>
+
+                        {{ tache.deadline }}
+
+                    </p>
+
+                    <div class="mt-4">
+
+                        <a href="{% url 'tache_update' tache.id %}"
+                           class="btn text-white"
+                           style="background-color:#6F4E37;">
+                            Modifier
+                        </a>
+
+                        <a href="{% url 'projet_detail' tache.projet.id %}"
+                           class="btn btn-secondary">
+                            
+                        </a>Retour
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

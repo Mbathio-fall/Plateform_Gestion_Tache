@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profil
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow">
+
+        <div class="card-header text-white"
+             style="background-color:#6F4E37;">
+
+            <h3>Mon Profil</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table">
+
+                <tr>
+
+                    <th>Nom d'utilisateur</th>
+
+                    <td>{{ user.username }}</td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Email</th>
+
+                    <td>{{ user.email }}</td>
+
+                </tr>
+                <tr>
+
+                    <th>Date d'inscription</th>
+
+                    <td>{{ user.date_joined }}</td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

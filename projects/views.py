@@ -15,7 +15,6 @@ def dashboard(request):
     return render(request,"dashboard.html",{"projets": projets})
 
 
-
 # vue projet_create
 
 @login_required
@@ -39,7 +38,10 @@ def projet_create(request):
 @login_required
 def projet_detail(request, id): 
   projet = get_object_or_404(Projet, id=id)
-  return render(request,"projet_detail.html",{"projet": projet})
+  taches = Tache.objects.filter(projet=projet)
+
+  return render(request,"projet_detail.html",{"projet": projet , "taches": taches,
+})
 
 
 
@@ -57,8 +59,10 @@ def projet_delete(request, id):
 
 @login_required
 def projet_update(request, id):
+
+    projet = get_object_or_404(Projet, id=id)
+
     if request.method == "POST":
-     projet = get_object_or_404(Projet, id=id)
      projet.nom = request.POST.get("nom")
      projet.description = request.POST.get("description")
      projet.save()
@@ -71,25 +75,34 @@ def projet_update(request, id):
 
 # vues tache_create
 
+from django.contrib.auth.models import User
+
 @login_required
 def tache_create(request):
 
     if request.method == "POST":
-         Tache.objects.create(
-           titre=request.POST.get("titre"),
-           description=request.POST.get("description"),
-           projet = Projet.objects.get(id=request.POST.get("projet")),     
-           assigne = User.objects.get(id=request.POST.get("assigne")),
-           statut=request.POST.get("statut"),
-           priorite=request.POST.get("priorite"),
-           deadline=request.POST.get("deadline"),
-    )
-         return redirect("dashboard")
 
-    return render(request, "tache_create.html")
+        Tache.objects.create(
+            titre=request.POST.get("titre"),
+            description=request.POST.get("description"),
+            projet=Projet.objects.get(id=request.POST.get("projet")),
+            assigne=User.objects.get(id=request.POST.get("assigne")),
+            statut=request.POST.get("statut"),
+            priorite=request.POST.get("priorite"),
+            deadline=request.POST.get("deadline"),
+        )
 
-    
+        return redirect("dashboard")
 
+    projets = Projet.objects.all()
+    utilisateurs = User.objects.all()
+
+    return render(request, "tache_create.html", {
+        "projets": projets,
+        "utilisateurs": utilisateurs,
+    })
+
+        
 
 # vues tache_detail
 
@@ -118,11 +131,13 @@ def tache_delete(request, id):
 
 @login_required
 def tache_update(request, id):
+    tache = get_object_or_404(Tache, id=id)
+
     if request.method == "POST":
-        tache = Tache.objects.get(id=id),
-        tache.titre = request.POST.get("titre"),
-        tache.description = request.POST.get("description"),
-        tache.save(),
-        return redirect("dashboard"),
+        tache = Tache.objects.get(id=id)
+        tache.titre = request.POST.get("titre")
+        tache.description = request.POST.get("description")
+        tache.save()
+        return redirect("dashboard")
     return render(request,"tache_update.html",{"tache": tache}
 )

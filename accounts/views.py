@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.shortcuts import render, redirect
@@ -20,17 +21,21 @@ def register(request):
         form = UserCreationForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect("login")
+            
+            user = form.save()
+
+            login(request, user)
+
+            return redirect("dashboard")
 
     else:
+
         form = UserCreationForm()
 
     return render(request, "register.html", {"form": form})
 
-#vue logout
 
-#vue login
+#vue profil
 @login_required
 def profil(request):
 

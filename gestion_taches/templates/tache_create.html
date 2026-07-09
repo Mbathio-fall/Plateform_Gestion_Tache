@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}
+Créer une tâche
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header text-center text-white"
+                     style="background-color:#6F4E37;">
+
+                    <h2>Créer une tâche</h2>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <!-- Titre -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Titre
+                            </label>
+
+                            <input
+                                type="text"
+                                name="titre"
+                                class="form-control"
+                                placeholder="Titre de la tâche"
+                                required>
+
+                        </div>
+
+                        <!-- Description -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Description
+                            </label>
+
+                            <textarea
+                                name="description"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Description de la tâche"></textarea>
+
+                        </div>
+
+                        <!-- Projet -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Projet
+                            </label>
+
+                            <select name="projet" class="form-select">
+
+                                {% for projet in projets %}
+
+                                    <option value="{{ projet.id }}">
+
+                                        {{ projet.nom }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <!-- Utilisateur -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Assigner à
+                            </label>
+
+                            <select name="assigne" class="form-select">
+
+                                {% for utilisateur in utilisateurs %}
+
+                                    <option value="{{ utilisateur.id }}">
+
+                                        {{ utilisateur.username }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <!-- Statut -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Statut
+                            </label>
+
+                            <select name="statut" class="form-select">
+
+                                <option value="todo">
+                                    À faire
+                                </option>
+
+                                <option value="en_cours">
+                                    En cours
+                                </option>
+
+                                <option value="termine">
+                                    Terminée
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- Priorité -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Priorité
+                            </label>
+
+                            <select name="priorite" class="form-select">
+
+                                <option value="basse">
+                                    Basse
+                                </option>
+
+                                <option value="moyenne">
+                                    Moyenne
+                                </option>
+
+                                <option value="haute">
+                                    Haute
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- Date limite -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Date limite
+                            </label>
+
+                            <input
+                                type="date"
+                                name="deadline"
+                                class="form-control">
+
+                        </div>
+
+                        <div class="text-center">
+
+                            <button
+                                type="submit"
+                                class="btn text-white px-5"
+                                style="background-color:#6F4E37;">
+
+                                Créer la tâche
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
