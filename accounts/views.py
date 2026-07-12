@@ -8,10 +8,6 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-#vues longinviews
-
-
-
 
 #vue register
 def register(request):
