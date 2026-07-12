@@ -27,8 +27,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default = False , cast = bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS',default='').split(',')
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',')
-
+csrf_env = config('CSRF_TRUSTED_ORIGINS', default='')
+CSRF_TRUSTED_ORIGINS = csrf_env.split(',') if csrf_env else []
 # Application definition
 
 INSTALLED_APPS = [
