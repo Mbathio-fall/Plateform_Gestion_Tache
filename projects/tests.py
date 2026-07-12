@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from .models import Projet, Tache
 
-# Create your tests here.
 # test unitaire
 class TestModeleProjet(TestCase):
 
@@ -28,6 +27,7 @@ class TestModeleProjet(TestCase):
         self.assertEqual(projet.createur.username, "Mariama")
 
     def test_str_projet(self):
+        """la methode str doit retourne le nom"""
         projet = Projet.objects.create(
             nom="developpement site e-commerce",
             description="Telelecharger django",
@@ -71,7 +71,7 @@ class TestModeleTache(TestCase):
         )
         self.assertEqual(tache.projet, self.Projet)
 
-
+# tests d'integration
 
 class TestVueDashboard(TestCase):
 
