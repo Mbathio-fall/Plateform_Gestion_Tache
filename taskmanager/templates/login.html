@@ -45,6 +45,7 @@
 
         <form method="POST">
 
+            {% csrf_token %}
             {% if form.errors %}
             <div class="alert alert-danger">
             Nom d'utilisateur ou mot de passe incorrect.
@@ -123,6 +124,8 @@
             <span class="mx-3 text-muted">
                 ou
             </span>
+
+
 
             <hr class="flex-grow-1">
 
