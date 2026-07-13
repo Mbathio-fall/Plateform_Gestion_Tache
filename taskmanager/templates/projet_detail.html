@@ -61,10 +61,11 @@ Détails du projet
                             Modifier
                         </a>
 
-                        <a href="{% url 'projet_delete' projet.id %}"
-                           class="btn btn-danger">
-                            Supprimer
-                        </a>
+                        {% if projet.createur == user %}
+                       <a href="{% url 'projet_delete' projet.id %}" class="btn btn-danger">
+                          Supprimer
+                       </a>
+                        {% endif %}
 
                         <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
                           Retour

@@ -1,3 +1,5 @@
+from pyexpat.errors import messages
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -49,12 +51,15 @@ def projet_detail(request, id):
 
 @login_required
 def projet_delete(request, id):
-   projet = get_object_or_404(Projet, id=id)    
+   projet = get_object_or_404(Projet, id=id) 
+
+   if projet.createur != request.user:
+        messages.error(request, "Vous n'êtes pas autorisé à supprimer ce projet.")
+        return redirect("dashboard")
+   
    projet.delete()
-
+   messages.success(request, "Le projet a été supprimé avec succès.")
    return redirect("dashboard")
-
-
 # vues projet_update
 
 @login_required
