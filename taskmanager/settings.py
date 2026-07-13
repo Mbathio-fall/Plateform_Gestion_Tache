@@ -31,8 +31,9 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
-csrf_env = config('CSRF_TRUSTED_ORIGINS', default='')
-CSRF_TRUSTED_ORIGINS = csrf_env.split(',') if csrf_env else []
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-3d645.up.railway.app",
+]
 # Application definition
 
 INSTALLED_APPS = [
