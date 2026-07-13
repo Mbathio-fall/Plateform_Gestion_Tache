@@ -26,7 +26,11 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default = False , cast = bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS',default='web-production-3d645.up.railway.app').split(',')
+ALLOWED_HOSTS = [
+    "web-production-3d645.up.railway.app",
+    "localhost",
+    "127.0.0.1",
+]
 csrf_env = config('CSRF_TRUSTED_ORIGINS', default='')
 CSRF_TRUSTED_ORIGINS = csrf_env.split(',') if csrf_env else []
 # Application definition
