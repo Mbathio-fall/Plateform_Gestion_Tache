@@ -1,9 +1,7 @@
-from pyexpat.errors import messages
-
-from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 import projects
 from .models import Projet, Tache
 
@@ -28,8 +26,6 @@ def projet_create(request):
             description=request.POST.get("description"),
             createur=request.user
         )
-          messages.success(request, "Le projet a été créé avec succès.")
-
           
           return redirect("dashboard")
 
@@ -53,16 +49,11 @@ def projet_detail(request, id):
 
 @login_required
 def projet_delete(request, id):
-    projet = get_object_or_404(Projet, id=id)
+   projet = get_object_or_404(Projet, id=id)    
+   projet.delete()
 
-    if projet.createur != request.user:
-        return HttpResponseForbidden(
-            "Vous n'avez pas l'autorisation de supprimer ce projet."
-        )
+   return redirect("dashboard")
 
-    projet.delete()
-    messages.success(request, "Le projet a été supprimé avec succès.")
-    return redirect("dashboard")
 
 # vues projet_update
 
@@ -100,7 +91,6 @@ def tache_create(request):
             priorite=request.POST.get("priorite"),
             deadline=request.POST.get("deadline"),
         )
-        messages.success(request, "La tâche a été créée avec succès.")
 
         return redirect("dashboard")
 

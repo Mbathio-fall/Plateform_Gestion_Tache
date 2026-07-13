@@ -1,5 +1,3 @@
-from pyexpat.errors import messages
-
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
@@ -20,14 +18,11 @@ def register(request):
 
         if form.is_valid():
             
-            form.save()
+            user = form.save()
 
-            messages.success(
-                request,
-                "Compte créé avec succès. Connectez-vous pour accéder à votre espace."
-            )
-
+            login(request, user)
             return redirect("login")
+
     else:
 
         form = UserCreationForm()
