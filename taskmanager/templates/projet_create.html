@@ -57,6 +57,27 @@ Créer un projet
 
                         </div>
 
+        <div class="mb-4">
+        <label class="form-label fw-bold">Membres du projet</label>
+
+            {% for utilisateur in utilisateurs %}
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="membres"
+                value="{{ utilisateur.id }}"
+                id="user{{ utilisateur.id }}">
+
+            <label class="form-check-label" for="user{{ utilisateur.id }}">
+                {{ utilisateur.username }}
+            </label>
+        </div>
+    {% endfor %}
+</div>
+
+
+
                         <div class="text-center">
 
                             <button

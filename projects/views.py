@@ -1,10 +1,8 @@
-from pyexpat.errors import messages
-
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
-import projects
+from urllib import request
 from .models import Projet, Tache
 
 #vue dashboard
@@ -12,9 +10,8 @@ from .models import Projet, Tache
 @login_required
 
 def dashboard(request):
-    projets = Projet.objects.all()
-
-    return render(request,"dashboard.html",{"projets": projets})
+ projets = Projet.objects.filter(membres=request.user)
+ return render(request,"dashboard.html",{"projets": projets})
 
 
 # vue projet_create
@@ -23,39 +20,37 @@ def dashboard(request):
 def projet_create(request):
 
     if request.method == "POST":
-          Projet.objects.create(
+          projet = Projet.objects.create(
             nom=request.POST.get("nom"),
             description=request.POST.get("description"),
             createur=request.user
         )
           
 # Ajouter automatiquement le créateur comme membre
-          Projet.membres.add(request.user)
-
+    projet.membres.add(request.user)
 # Récupérer les membres sélectionnés
     membres = request.POST.getlist("membres")
 
     for membre_id in membres:
-        utilisateur = User.objects.get(id=membre_id)
-        Projet.membres.add(utilisateur)
+      utilisateur = User.objects.get(id=membre_id)
+      projet.membres.add(utilisateur)
 
-        return redirect("dashboard")
+      return redirect("dashboard")
 
     utilisateurs = User.objects.exclude(id=request.user.id)
 
-    return render(request, "projet_create.html", {
-        "utilisateurs": utilisateurs
-    })
+    return render(request, "projet_create.html", {"utilisateurs": utilisateurs})
 
     
 # vues projet_detail
 
 @login_required
 def projet_detail(request, id): 
-  projet = get_object_or_404(Projet, id=id)
-  taches = Tache.objects.filter(projet=projet)
+ 
+   projet = get_object_or_404(Projet,id=id)
+   taches = Tache.objects.filter(projet=projet) 
 
-  return render(request,"projet_detail.html",{"projet": projet , "taches": taches,
+return render(request,"projet_detail.html",{"projet": projet , "taches": taches, # type: ignore
 })
 
 
