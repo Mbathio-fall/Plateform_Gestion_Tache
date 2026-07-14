@@ -50,8 +50,7 @@ def projet_detail(request, id):
    projet = get_object_or_404(Projet,id=id)
    taches = Tache.objects.filter(projet=projet) 
 
-return render(request,"projet_detail.html",{"projet": projet , "taches": taches, # type: ignore
-})
+   return render(request,"projet_detail.html",{"projet": projet , "taches": taches,})
 
 
 
