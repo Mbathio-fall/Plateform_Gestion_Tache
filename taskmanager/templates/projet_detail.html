@@ -54,13 +54,14 @@ Détails du projet
                     </p>
 
                     <div class="mt-4">
-
+                      {% if projet.createur == request.user %}
                         <a href="{% url 'projet_update' projet.id %}"
                            class="btn text-white"
                            style="background-color:#6F4E37;">
                             Modifier
                         </a>
-
+                       {% endif %}
+                       
                         {% if projet.createur == user %}
                        <a href="{% url 'projet_delete' projet.id %}" class="btn btn-danger">
                           Supprimer

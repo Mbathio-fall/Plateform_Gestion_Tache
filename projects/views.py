@@ -46,13 +46,20 @@ def projet_create(request):
 # vues projet_detail
 
 @login_required
-def projet_detail(request, id): 
- 
-   projet = get_object_or_404(Projet,id=id)
-   taches = Tache.objects.filter(projet=projet) 
+def projet_detail(request, id):
 
-   return render(request,"projet_detail.html",{"projet": projet , "taches": taches,})
+    projet = get_object_or_404(Projet, id=id)
 
+    # Vérifions que l'utilisateur est membre du projet
+    if request.user not in projet.membres.all():
+        return redirect("dashboard")
+
+    taches = Tache.objects.filter(projet=projet)
+
+    return render(request, "projet_detail.html", {
+        "projet": projet,
+        "taches": taches,
+    })
 
 
 # vues projet_delete
