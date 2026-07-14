@@ -20,28 +20,30 @@ def dashboard(request):
 def projet_create(request):
 
     if request.method == "POST":
-          projet = Projet.objects.create(
+
+        projet = Projet.objects.create(
             nom=request.POST.get("nom"),
             description=request.POST.get("description"),
             createur=request.user
         )
-          
-# Ajouter automatiquement le créateur comme membre
-    projet.membres.add(request.user)
-# Récupérer les membres sélectionnés
-    membres = request.POST.getlist("membres")
 
-    for membre_id in membres:
-      utilisateur = User.objects.get(id=membre_id)
-      projet.membres.add(utilisateur)
+        # Le createur est membre automatiquement
+        projet.membres.add(request.user)
 
-      return redirect("dashboard")
+        #  membres sélectionnés
+        membres = request.POST.getlist("membres")
+
+        for membre_id in membres:
+            utilisateur = User.objects.get(id=membre_id)
+            projet.membres.add(utilisateur)
+
+        return redirect("dashboard")
 
     utilisateurs = User.objects.exclude(id=request.user.id)
 
-    return render(request, "projet_create.html", {"utilisateurs": utilisateurs})
-
-    
+    return render(request, "projet_create.html", {
+        "utilisateurs": utilisateurs
+    })
 # vues projet_detail
 
 @login_required
