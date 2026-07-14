@@ -29,10 +29,23 @@ def projet_create(request):
             createur=request.user
         )
           
-          return redirect("dashboard")
+# Ajouter automatiquement le créateur comme membre
+          Projet.membres.add(request.user)
 
-    return render(request,"projet_create.html")
+# Récupérer les membres sélectionnés
+    membres = request.POST.getlist("membres")
 
+    for membre_id in membres:
+        utilisateur = User.objects.get(id=membre_id)
+        Projet.membres.add(utilisateur)
+
+        return redirect("dashboard")
+
+    utilisateurs = User.objects.exclude(id=request.user.id)
+
+    return render(request, "projet_create.html", {
+        "utilisateurs": utilisateurs
+    })
 
     
 # vues projet_detail
