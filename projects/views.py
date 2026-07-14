@@ -95,13 +95,14 @@ def projet_update(request, id):
 
 # vues tache_create
 
-from django.contrib.auth.models import User
 
 @login_required
 def tache_create(request):
 
     if request.method == "POST":
-
+        projet = Projet.objects.get(id=request.POST.get("projet"))
+        if projet.createur != request.user:
+            return redirect("dashboard")
         Tache.objects.create(
             titre=request.POST.get("titre"),
             description=request.POST.get("description"),
@@ -114,7 +115,7 @@ def tache_create(request):
 
         return redirect("dashboard")
 
-    projets = Projet.objects.all()
+    projets = Projet.objects.filter(createur=request.user)
     utilisateurs = User.objects.all()
 
     return render(request, "tache_create.html", {
