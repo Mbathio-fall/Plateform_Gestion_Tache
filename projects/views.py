@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -69,11 +68,9 @@ def projet_delete(request, id):
    projet = get_object_or_404(Projet, id=id) 
 
    if projet.createur != request.user:
-        messages.error(request, "Vous n'êtes pas autorisé à supprimer ce projet.")
         return redirect("dashboard")
    
    projet.delete()
-   messages.success(request, "Le projet a été supprimé avec succès.")
    return redirect("dashboard")
 
 # vues projet_update
@@ -112,7 +109,6 @@ def tache_create(request):
 
         # Vérifier que l'utilisateur est membre du projet
         if utilisateur not in projet.membres.all():
-            messages.error(request, "Cet utilisateur n'est pas membre du projet.")
             return redirect("tache_create")
         
         Tache.objects.create(
@@ -129,7 +125,6 @@ def tache_create(request):
 
     projets = Projet.objects.filter(createur=request.user)
     if not projets.exists():
-     messages.error(request, "Vous devez être créateur d'un projet pour créer une tâche.")
      return redirect("dashboard")
 
     utilisateurs = User.objects.all()
