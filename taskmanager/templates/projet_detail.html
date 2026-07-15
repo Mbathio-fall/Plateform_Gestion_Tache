@@ -62,7 +62,7 @@ Détails du projet
                         </a>
                        {% endif %}
                        
-                        {% if projet.createur == user %}
+                      {% if projet.createur == request.user %}
                        <a href="{% url 'projet_delete' projet.id %}" class="btn btn-danger">
                           Supprimer
                        </a>
@@ -92,11 +92,13 @@ Détails du projet
         <span class="badge bg-secondary">{{ taches|length }}</span>
     </h4>
 
+    {% if projet.createur == request.user %}
     <a href="{% url 'tache_create' %}"
-       class="btn text-white"
-       style="background-color:#6F4E37;">
-        <i class="bi bi-plus-circle"></i> Nouvelle tâche
+     class="btn text-white"
+     style="background-color:#6F4E37;">
+     <i class="bi bi-plus-circle"></i> Nouvelle tâche
     </a>
+{% endif %}
 
 </div>
 

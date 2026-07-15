@@ -75,12 +75,16 @@ def projet_delete(request, id):
    projet.delete()
    messages.success(request, "Le projet a été supprimé avec succès.")
    return redirect("dashboard")
+
 # vues projet_update
 
 @login_required
 def projet_update(request, id):
 
     projet = get_object_or_404(Projet, id=id)
+    if projet.createur != request.user:
+        return redirect("dashboard")
+
 
     if request.method == "POST":
      projet.nom = request.POST.get("nom")
@@ -103,6 +107,14 @@ def tache_create(request):
         projet = Projet.objects.get(id=request.POST.get("projet"))
         if projet.createur != request.user:
             return redirect("dashboard")
+        
+        utilisateur = User.objects.get(id=request.POST.get("assigne"))
+
+        # Vérifier que l'utilisateur est membre du projet
+        if utilisateur not in projet.membres.all():
+            messages.error(request, "Cet utilisateur n'est pas membre du projet.")
+            return redirect("tache_create")
+        
         Tache.objects.create(
             titre=request.POST.get("titre"),
             description=request.POST.get("description"),
@@ -116,6 +128,10 @@ def tache_create(request):
         return redirect("dashboard")
 
     projets = Projet.objects.filter(createur=request.user)
+    if not projets.exists():
+     messages.error(request, "Vous devez être créateur d'un projet pour créer une tâche.")
+     return redirect("dashboard")
+
     utilisateurs = User.objects.all()
 
     return render(request, "tache_create.html", {
@@ -141,6 +157,9 @@ def tache_detail(request, id):
 def tache_delete(request, id):
 
     tache = get_object_or_404(Tache, id=id)
+     # Seul le créateur du projet peut supprimer une tache
+    if tache.projet.createur != request.user:
+        return redirect("dashboard")
 
     tache.delete()
 
@@ -153,9 +172,12 @@ def tache_delete(request, id):
 @login_required
 def tache_update(request, id):
     tache = get_object_or_404(Tache, id=id)
+    # Seul le créateur du projet peut modifier une tache
+    if tache.projet.createur != request.user:
+        return redirect("dashboard")
+
 
     if request.method == "POST":
-        tache = Tache.objects.get(id=id)
         tache.titre = request.POST.get("titre")
         tache.description = request.POST.get("description")
         tache.save()
